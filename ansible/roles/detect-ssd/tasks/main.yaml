@@ -1,0 +1,14 @@
+---
+  - debug:
+      msg: "Checking if the disk {{ satellite_physical_disk }} is SSD"
+  - name: Retrieve the contents of the disk
+    shell:
+      cat "/sys/block/{{ satellite_physical_disk }}/queue/rotational
+    register: is_ssd
+  - set_fact:
+      ssd: true
+    when: "{{ is_ssd.stdout | int }}" == 0
+  - set_fact:
+      ssd: false
+    when: "{{ is_ssd.stdout | int }}" == 1
+...
